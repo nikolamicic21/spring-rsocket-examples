@@ -1,8 +1,8 @@
-package io.mickeckemi21.springrsocketapps.rsocketbaeldung.requestStream
+package io.mickeckemi21.rsocketbaeldung.requestStream
 
-import io.mickeckemi21.springrsocketapps.rsocketbaeldung.Server.Companion.DATA_STREAM_NAME
-import io.mickeckemi21.springrsocketapps.rsocketbaeldung.Server.Companion.HOST
-import io.mickeckemi21.springrsocketapps.rsocketbaeldung.Server.Companion.TCP_PORT
+import io.mickeckemi21.rsocketbaeldung.Server.Companion.DATA_STREAM_NAME
+import io.mickeckemi21.rsocketbaeldung.Server.Companion.HOST
+import io.mickeckemi21.rsocketbaeldung.Server.Companion.TCP_PORT
 import io.rsocket.Payload
 import io.rsocket.RSocketFactory
 import io.rsocket.transport.netty.client.TcpClientTransport

@@ -1,7 +1,7 @@
-package io.mickeckemi21.springrsocketapps.rsocketbaeldung.requestResponse
+package io.mickeckemi21.rsocketbaeldung
 
-import io.mickeckemi21.springrsocketapps.rsocketbaeldung.Server.Companion.HOST
-import io.mickeckemi21.springrsocketapps.rsocketbaeldung.Server.Companion.TCP_PORT
+import io.mickeckemi21.rsocketbaeldung.Server.Companion.HOST
+import io.mickeckemi21.rsocketbaeldung.Server.Companion.TCP_PORT
 import io.rsocket.Payload
 import io.rsocket.RSocket
 import io.rsocket.RSocketFactory

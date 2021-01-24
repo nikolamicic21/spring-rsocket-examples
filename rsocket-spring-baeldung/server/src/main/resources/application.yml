@@ -1,0 +1,7 @@
+spring:
+  rsocket:
+    server:
+      port: 7000
+      transport: tcp
+  main:
+    web-application-type: none

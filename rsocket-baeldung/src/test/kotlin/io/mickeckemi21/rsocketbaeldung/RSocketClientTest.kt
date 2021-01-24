@@ -1,9 +1,9 @@
-package io.mickeckemi21.springrsocketapps.rsocketbaeldung.requestResponse
+package io.mickeckemi21.rsocketbaeldung
 
-import io.mickeckemi21.springrsocketapps.rsocketbaeldung.Server
-import io.mickeckemi21.springrsocketapps.rsocketbaeldung.fireAndForget.FireAndForgetClient
-import io.mickeckemi21.springrsocketapps.rsocketbaeldung.requestChannel.ReqChannelClient
-import io.mickeckemi21.springrsocketapps.rsocketbaeldung.requestStream.ReqStreamClient
+import io.mickeckemi21.rsocketbaeldung.Server
+import io.mickeckemi21.rsocketbaeldung.fireAndForget.FireAndForgetClient
+import io.mickeckemi21.rsocketbaeldung.requestChannel.ReqChannelClient
+import io.mickeckemi21.rsocketbaeldung.requestStream.ReqStreamClient
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach

@@ -1,8 +1,8 @@
-package io.mickeckemi21.springrsocketapps.rsocketbaeldung.requestChannel
+package io.mickeckemi21.rsocketbaeldung.requestChannel
 
-import io.mickeckemi21.springrsocketapps.rsocketbaeldung.GameController
-import io.mickeckemi21.springrsocketapps.rsocketbaeldung.Server.Companion.HOST
-import io.mickeckemi21.springrsocketapps.rsocketbaeldung.Server.Companion.TCP_PORT
+import io.mickeckemi21.rsocketbaeldung.GameController
+import io.mickeckemi21.rsocketbaeldung.Server.Companion.HOST
+import io.mickeckemi21.rsocketbaeldung.Server.Companion.TCP_PORT
 import io.rsocket.RSocket
 import io.rsocket.RSocketFactory
 import io.rsocket.transport.netty.client.TcpClientTransport

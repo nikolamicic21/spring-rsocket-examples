@@ -1,4 +1,4 @@
-package io.mickeckemi21.springrsocketapps.rsocketbaeldung
+package io.mickeckemi21.rsocketbaeldung
 
 import io.rsocket.Payload
 import org.reactivestreams.Publisher
