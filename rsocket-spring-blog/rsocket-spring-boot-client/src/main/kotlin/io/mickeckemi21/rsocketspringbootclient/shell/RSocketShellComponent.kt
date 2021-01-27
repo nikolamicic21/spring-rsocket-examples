@@ -3,7 +3,10 @@ package io.mickeckemi21.rsocketspringbootclient.shell
 import io.mickeckemi21.rsocketspringbootclient.model.Message
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
+import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.rsocket.RSocketRequester
+import org.springframework.messaging.rsocket.RSocketStrategies
+import org.springframework.messaging.rsocket.annotation.support.RSocketMessageHandler
 import org.springframework.messaging.rsocket.connectTcpAndAwait
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
@@ -12,20 +15,44 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.time.Duration
 import java.time.Duration.ofSeconds
+import java.util.*
 
 @ShellComponent
-class RSocketShellComponent(private val rSocketRequesterBuilder: RSocketRequester.Builder) {
+class RSocketShellComponent(
+    private val rSocketRequesterBuilder: RSocketRequester.Builder,
+    private val strategies: RSocketStrategies
+) {
 
     companion object {
         private val log = LoggerFactory.getLogger(RSocketShellComponent::class.java)
     }
 
-    private val rSocketRequester = runBlocking {
-        rSocketRequesterBuilder
-            .connectTcpAndAwait("localhost", 7000)
-    }
-
+    private lateinit var rSocketRequester: RSocketRequester
     private lateinit var disposable: Disposable
+
+    init {
+        val client = UUID.randomUUID().toString();
+        log.info("Connecting using client ID: $client")
+
+        val responder = RSocketMessageHandler
+            .responder(strategies, ClientHandler())
+
+        runBlocking {
+            rSocketRequester = rSocketRequesterBuilder
+                .setupRoute("shell.client")
+                .setupData(client)
+                .rsocketStrategies(strategies)
+                .rsocketConnector { it.acceptor(responder) }
+                .connectTcpAndAwait("localhost", 7000)
+        }
+
+        rSocketRequester
+            .rsocket()!!
+            .onClose()
+            .doOnError { log.warn("Connection CLOSED") }
+            .doFinally { log.info("Client Disconnected") }
+            .subscribe()
+    }
 
     @ShellMethod("Send one request, one response will be printed")
     fun requestResponse() {
@@ -78,6 +105,21 @@ class RSocketShellComponent(private val rSocketRequesterBuilder: RSocketRequeste
         if (this::disposable.isInitialized) {
             disposable.dispose()
         }
+    }
+
+    class ClientHandler {
+
+        companion object {
+            private val log = LoggerFactory.getLogger(ClientHandler::class.java)
+        }
+
+        @MessageMapping("client.status")
+        fun statusUpdate(status: String): Flux<String> {
+            log.info("Connection $status")
+            return Flux.interval(Duration.ofSeconds(5L))
+                .map { Runtime.getRuntime().freeMemory().toString() }
+        }
+
     }
 
 }
