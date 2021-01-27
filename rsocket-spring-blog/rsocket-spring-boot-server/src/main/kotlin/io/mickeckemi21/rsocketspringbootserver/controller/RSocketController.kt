@@ -16,6 +16,9 @@ import java.util.concurrent.ConcurrentHashMap
 class RSocketController {
 
     companion object {
+        const val SERVER = "SERVER"
+        const val RESPONSE = "RESPONSE"
+
         private val log = LoggerFactory.getLogger(RSocketController::class.java)
     }
 
@@ -25,7 +28,7 @@ class RSocketController {
     fun requestResponse(request: Message): Message {
         log.info("Received request-response request: {}", request)
         // create a single Message and return it
-        return Message("SERVER", "RESPONSE")
+        return Message(SERVER, RESPONSE)
     }
 
     @MessageMapping("fire.and.forget")
@@ -37,7 +40,7 @@ class RSocketController {
     fun stream(request: Message): Flux<Message> {
         log.info("Received stream request: {}", request)
         return Flux.interval(Duration.ofSeconds(1L))
-            .map { Message("SERVER", "STREAM", it) }
+            .map { Message(SERVER, "STREAM", it) }
             .log()
     }
 
@@ -49,7 +52,7 @@ class RSocketController {
                 log.info("\nFrequency setting is ${setting.seconds} second(s)\n")
             }.switchMap { setting ->
                 Flux.interval(setting).map {
-                    Message("SERVER", "CHANNEL", it)
+                    Message(SERVER, "CHANNEL", it)
                 }
             }.log()
     }

@@ -42,4 +42,8 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+
+	filter {
+		includeTestsMatching("*IT")
+	}
 }
