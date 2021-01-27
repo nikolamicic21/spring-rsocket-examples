@@ -24,6 +24,9 @@ repositories {
 dependencies {
 	implementation("org.springframework.shell:spring-shell-starter:2.0.1.RELEASE")
 	implementation("org.springframework.boot:spring-boot-starter-rsocket")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.security:spring-security-rsocket")
+	implementation("org.springframework.security:spring-security-messaging")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

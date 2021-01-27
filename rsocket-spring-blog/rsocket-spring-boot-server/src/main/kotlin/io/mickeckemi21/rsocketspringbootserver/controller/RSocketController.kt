@@ -7,8 +7,12 @@ import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.messaging.rsocket.RSocketRequester
 import org.springframework.messaging.rsocket.annotation.ConnectMapping
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Controller
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 import java.time.Duration
 import java.util.concurrent.ConcurrentHashMap
 
@@ -18,6 +22,8 @@ class RSocketController {
     companion object {
         const val SERVER = "SERVER"
         const val RESPONSE = "RESPONSE"
+        const val STREAM = "STREAM"
+        const val CHANNEL = "CHANNEL"
 
         private val log = LoggerFactory.getLogger(RSocketController::class.java)
     }
@@ -31,16 +37,23 @@ class RSocketController {
         return Message(SERVER, RESPONSE)
     }
 
+    @PreAuthorize("hasRole('USER')")
     @MessageMapping("fire.and.forget")
-    fun fireAndForget(request: Message) {
+    fun fireAndForget(
+        request: Message,
+        @AuthenticationPrincipal user: UserDetails
+    ): Mono<Unit> {
         log.info("Received fire-and-forget request: {}", request)
+        log.info("Fire-And-Forget initiated by " +
+                "'${user.username}' in the role '${user.authorities}'")
+        return Mono.empty()
     }
 
     @MessageMapping("stream")
     fun stream(request: Message): Flux<Message> {
         log.info("Received stream request: {}", request)
         return Flux.interval(Duration.ofSeconds(1L))
-            .map { Message(SERVER, "STREAM", it) }
+            .map { Message(SERVER, STREAM, it) }
             .log()
     }
 
@@ -52,7 +65,7 @@ class RSocketController {
                 log.info("\nFrequency setting is ${setting.seconds} second(s)\n")
             }.switchMap { setting ->
                 Flux.interval(setting).map {
-                    Message(SERVER, "CHANNEL", it)
+                    Message(SERVER, CHANNEL, it)
                 }
             }.log()
     }
